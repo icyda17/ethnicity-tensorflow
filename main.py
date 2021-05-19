@@ -14,14 +14,28 @@ flags.DEFINE_integer("train_epoch", 3000, "Epoch to train")
 flags.DEFINE_integer("dim_unigram", 82, "Dimension of input, 42 or 82")
 flags.DEFINE_integer("dim_bigram", 1876, "Dimension of input, 925 or 1876")
 flags.DEFINE_integer("dim_trigram", 14767, "Dimension of input, 8573 or 14767")
-flags.DEFINE_integer("dim_output", 127, "Dimension of output, 95 or 127")
+flags.DEFINE_integer("dim_output", 127, "Dimension of output, 95 or 127") # #nationalities
 flags.DEFINE_integer("max_time_step", 60, "Maximum time step of RNN")
 flags.DEFINE_integer("min_grad", -5, "Minimum gradient to clip")
+'''
+If a gradient exceeds some threshold value, we clip that gradient to the threshold. -> Exploding gradient
+If the gradient is less than the lower limit then we clip that too, to the lower limit of the threshold. -> Vanishing gradient
+'''    
 flags.DEFINE_integer("max_grad", 5, "Maximum gradient to clip")
 flags.DEFINE_integer("batch_size", 300, "Size of batch")
 flags.DEFINE_integer("ngram", 3, "Ngram feature when ensemble = False.")
 flags.DEFINE_float("decay_rate", 0.99, "Decay rate of learning rate")
+'''
+Learning rate schedules seek to adjust the learning rate during training by reducing the learning rate according to a pre-defined schedule.
+lr *= (1. / (1. + decay_rate * epochs))
+'''
 flags.DEFINE_float("decay_step", 100, "Decay step of learning rate")
+'''
+Step decay schedule drops the learning rate by a factor every few epochs. 
+lr = lr0 * drop^floor(epoch / epochs_drop) 
+drop: ratio to drop lr
+epochs_drop: drop lr after # epochs
+'''
 
 # Validation hyper parameters
 flags.DEFINE_integer("valid_iteration", 250, "Number of validation iteration.")
@@ -165,5 +179,9 @@ def main(_):
     validation_writer.close()
 
 if __name__ == '__main__':
-    tf.app.run()
+    tf.app.run() 
+    '''
+    current file is executed under a shell instead of imported as a module, 
+    ensures that the argument you pass through command line is valid
+    '''
 
